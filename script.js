@@ -15,6 +15,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let dx = cellSize; // +20;
     let dy = 0;
+    let gameSpeed = 200;
+
+
+    // Move Food Function 
+    function moveFood() {
+        let newX, newY;
+
+        do {
+            newX = Math.floor(Math.random() * 30) * cellSize;
+            newY = Math.floor(Math.random() * 30) * cellSize;
+        } while (snake.some(snakeCell => snakeCell.x === newX && snakeCell.y === newY));
+
+        food = { x: newX, y: newY };
+    }
 
     // Update Snake Position based on the direction 
     function updateSnake() {
@@ -24,9 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
         // checking collision with food
         if (newHead.x === food.x && newHead.y === food.y) {
             score += 10;
-            //TODO: Move food 
+            moveFood();
+            if (gameSpeed > 50) {
+                clearInterval(intervalId);
+                gameSpeed -= 10;
+                gameLoop();
+            }
+
         } else {
-            snake.pop();
+            snake.pop(); // Remove tail of snake
         }
     }
 
@@ -96,18 +116,26 @@ document.addEventListener('DOMContentLoaded', function () {
         return hitLeftWall || hitRightWal || hitTopWall || hitBottomWall;
     }
 
+    // Function to Draw Score Board
+    function drawScoreBoard() {
+        const scoreBoard = document.getElementById('score-board');
+        scoreBoard.textContent = `Score : ${score}`;
+    }
+
     // Game loop Function 
     function gameLoop() {
         intervalId = setInterval(() => {
             if (isGameOver()) {
                 clearInterval(intervalId);
                 gameStarted = false;
+                alert('Game Over' + '\n' + 'Your Score: ' + score);
                 return;
             }
 
             updateSnake();
             drawFoodAndSnake();
-        }, 200)
+            drawScoreBoard()
+        }, gameSpeed)
     }
 
     // Function to run the Game the user Click on the start button
