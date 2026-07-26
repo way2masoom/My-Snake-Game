@@ -20,7 +20,7 @@ https://github.com/way2masoom/My-Snake-Game
 
 ## 📸 Preview
 
-> Add your game screenshot or GIF here.
+![Snake Game Banner](SnakeGame.png)
 
 ```md
 ![Snake Game Preview](preview.png)
